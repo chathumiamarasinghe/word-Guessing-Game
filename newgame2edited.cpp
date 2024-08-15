@@ -2,8 +2,8 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
-#include <fstream>  
-#include <vector>   
+#include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -21,7 +21,7 @@ string chooseRandomWordFromVector(const vector<string>& words) {
     return words[randomIndex];
 }
 
-
+// Function to display the current state of the word with guessed letters
 void displayWord(const string& word, const bool guessed[], int wordLength) {
     for (int i = 0; i < wordLength; i++) {
         if (guessed[i]) {
@@ -33,8 +33,8 @@ void displayWord(const string& word, const bool guessed[], int wordLength) {
     cout << endl;
 }
 
+// Function to display hangman drawing based on the number of attempts
 void displayHangman(int attempts) {
-   
     switch (attempts) {
         case 0:
             cout << "_________" << endl;
@@ -95,10 +95,10 @@ void displayHangman(int attempts) {
     }
 }
 
-
+// Function to load words from a file into a vector
 vector<string> loadWordsFromFile(const string& filename) {
     vector<string> words;
-    ifstream file(filename.c_str());  // Convert std::string to const char* using c_str()
+    ifstream file(filename.c_str());
     string word;
     while (file >> word) {
         words.push_back(word);
@@ -106,19 +106,18 @@ vector<string> loadWordsFromFile(const string& filename) {
     return words;
 }
 
-
+// Function to handle hints
 string provideHint(const string& word) {
-    
     return string(1, word[0]);
 }
 
-
+// Function to validate user input
 char getValidatedInput() {
     char input;
     while (true) {
         cin >> input;
         if (isalpha(input)) {
-            input = tolower(input);  // Convert to lowercase
+            input = tolower(input);
             break;
         } else {
             cout << "Invalid input. Please enter a letter: ";
@@ -127,19 +126,32 @@ char getValidatedInput() {
     return input;
 }
 
+// Function to display a creative design when the player wins
+void displayWinningDesign() {
+    cout << "  __  __   _   _    _    _   _    ___  " << endl;
+    cout << " |  \\/  | | | | |  / \\  | \\ | |  / _ \\ " << endl;
+    cout << " | |\\/| | | | | | / _ \\ |  \\| | | | | |" << endl;
+    cout << " | |  | | | |_| |/ ___ \\| |\\  | | |_| |" << endl;
+    cout << " |_|  |_|  \\___//_/   \\_\\_| \\_|  \\___/ " << endl;
+    cout << "                                       " << endl;
+    cout << "     Congratulations, you won!         " << endl;
+    cout << "        Keep up the great work!        " << endl;
+    cout << "                                       " << endl;
+}
+
 int main() {
     const int maxAttempts = 6;
     int score = 0;
 
     // Word categories
     string word_fruit[] = {"apple", "banana", "cherry", "grape", "orange", "avocado", "papaya", "strawberry", "mango", "guava"};
-    string word_animal[] = {"cat", "horse", "dog", "snake", "rabbit", "elephant", "Jaguar", "Panda", "scorpion", "sheep"};
+    string word_animal[] = {"cat", "horse", "dog", "snake", "rabbit", "elephant", "jaguar", "panda", "scorpion", "sheep"};
     string word_vehicle[] = {"boat", "bicycle", "ship", "tractor", "plane", "truck", "excavator", "ambulance", "helicopter", "scooter"};
     string word_movie[] = {"titanic", "jurassic", "inception", "tenet", "oppenheimer", "interstellar", "avatar", "matrix", "gravity", "gladiator"};
     string word_planet[] = {"mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto", "eris"};
     string word_country[] = {"usa", "canada", "france", "japan", "india", "brazil", "australia", "russia", "germany", "china"};
 
-    vector<string> dynamic_words = loadWordsFromFile("words.txt");  // Example of dynamic word list
+    vector<string> dynamic_words = loadWordsFromFile("words.txt");
 
     string wordToGuess;
     bool guessed[20];
@@ -171,10 +183,8 @@ int main() {
             }
 
         } else if (game_level == "medium") {
-            
             wordToGuess = chooseRandomWordFromVector(dynamic_words);
         } else if (game_level == "hard") {
-            
             vector<string> hard_words = loadWordsFromFile("hard_words.txt");
             wordToGuess = chooseRandomWordFromVector(hard_words);
         }
@@ -226,7 +236,7 @@ int main() {
             }
 
             if (wordGuessed) {
-                cout << "Congratulations! You guessed the word: " << wordToGuess << endl;
+                displayWinningDesign();
                 score++;
                 break;
             }
@@ -239,8 +249,10 @@ int main() {
         cout << "Your score: " << score << endl;
         cout << "Do you want to play again? (y/n): ";
         cin >> playAgain;
-
     } while (playAgain == 'y' || playAgain == 'Y');
+
+    cout << "Thank you for playing the Word Master Game!" << endl;
 
     return 0;
 }
+
